@@ -41,7 +41,7 @@ function stripeClient() {
     const u = new URL(process.env.STRIPE_TEST_HOST);
     Object.assign(opts, { host: u.hostname, port: u.port, protocol: u.protocol.replace(':', '') });
   }
-  return new Stripe(process.env.STRIPE_SECRET_KEY, opts);
+  return new Stripe(process.env.STRIPE_SECRET_KEY.trim().replace(/^['"]|['"]$/g, ''), opts);
 }
 const stripe = stripeClient();
 
@@ -83,7 +83,7 @@ async function checkPurchase(sessionId) {
 
 // ---------- pack files (AES-256-GCM: [12-byte IV][16-byte tag][data]) ----------
 function packKey() {
-  const raw = process.env.PACK_KEY || '';
+  const raw = (process.env.PACK_KEY || '').trim().replace(/^['"]|['"]$/g, '');
   const key = Buffer.from(raw, 'base64');
   return key.length === 32 ? key : null;
 }
@@ -175,7 +175,7 @@ app.set('trust proxy', true);
 
 // Stripe needs the raw body to check the signature, so this route comes before any JSON parsing.
 app.post('/stripe/webhook', express.raw({ type: 'application/json', limit: '1mb' }), async (req, res) => {
-  const secret = process.env.STRIPE_WEBHOOK_SECRET;
+  const secret = (process.env.STRIPE_WEBHOOK_SECRET || '').trim().replace(/^['"]|['"]$/g, '');
   if (!stripe || !secret) return res.status(503).send('webhook not configured');
   let event;
   try {

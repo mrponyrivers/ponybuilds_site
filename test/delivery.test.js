@@ -54,7 +54,7 @@ test.before(async () => {
   srv = spawn('node', ['server.js'], {
     cwd: ROOT,
     env: { ...process.env, PORT: String(port), STRIPE_SECRET_KEY: 'sk_test_fake', STRIPE_TEST_HOST: `http://127.0.0.1:${fake.address().port}`,
-      STRIPE_WEBHOOK_SECRET: WHSEC, PACK_KEY: KEY, PACKS_DIR: tmp, SMTP_URL: 'json', SITE_URL: 'https://ponybuilds.com' },
+      STRIPE_WEBHOOK_SECRET: ' ' + WHSEC + '\n', PACK_KEY: KEY, PACKS_DIR: tmp, SMTP_URL: 'json', SITE_URL: 'https://ponybuilds.com' },
   });
   srv.stdout.on('data', d => { logs += d; });
   srv.stderr.on('data', d => { logs += d; });
@@ -115,7 +115,7 @@ test('no download without a real, paid, recent purchase', async () => {
 test('webhook: signed event emails the buyer once; forged event rejected', async () => {
   const payload = JSON.stringify({ id: 'evt_1', object: 'event', type: 'checkout.session.completed', data: { object: { id: 'cs_test_paidOK1234567890', object: 'checkout.session' } } });
   const sig = Stripe.webhooks.generateTestHeaderString({ payload, secret: WHSEC });
-  const send = h => fetch(base + '/stripe/webhook', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Stripe-Signature': h }, body: payload });
+  const send = h => fetch(base + '/stripe/webhook', { method: 'POST', headers: { 'Content-Type': 'application/json; charset=utf-8', 'Stripe-Signature': h }, body: payload });
   const r1 = await (await send(sig)).json();
   assert.deepEqual(r1, { received: true, delivered: true, emailed: true });
   assert.match(logs, /buyer@example\.com/);
