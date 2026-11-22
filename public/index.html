@@ -348,7 +348,19 @@ if (PB.instagram) ig.href = PB.instagram; else ig.remove();
     const widest = () => Math.max(...lines.map(l => o.measureText(l).width));
     const maxW = tcols * (narrow ? 0.9 : 0.84);
     if (widest() > maxW) { size *= maxW / widest(); setF(size); }
-    const cy = trows * (narrow ? 0.30 : 0.38);
+    let cy = trows * (narrow ? 0.30 : 0.38);
+    // keep the title in the free band between the top bar and the copy box, so the box never covers it
+    const hr = hero.getBoundingClientRect();
+    const bar = document.querySelector('.bar');
+    const copy = hero.querySelector('.hero-copy');
+    const bandTop = Math.max(0, (bar ? bar.getBoundingClientRect().bottom : 0) - hr.top) / tcell + 2;
+    const bandBot = ((copy ? copy.getBoundingClientRect().top : hr.bottom) - hr.top) / tcell - 3;
+    if (bandBot - bandTop > 8) {
+      const need = lines.length * size;
+      if (need > bandBot - bandTop) { size = (bandBot - bandTop) / lines.length; setF(size); }
+      const half = lines.length * size / 2;
+      cy = Math.min(Math.max(cy, bandTop + half), bandBot - half);
+    }
     lines.forEach((l, i) => o.fillText(l, tcols / 2, cy + (i - (lines.length - 1) / 2) * size * 1.0));
     const d = o.getImageData(0, 0, tcols, trows).data;
     mask = new Uint8Array(tcols * trows); maskList = [];
@@ -430,7 +442,7 @@ if (PB.instagram) ig.href = PB.instagram; else ig.remove();
 
   // pause the animation when the hero is off-screen (saves battery)
   let running = false;
-  const go = () => { if (!running && !reduce) { running = true; raf = requestAnimationFrame(frame); } };
+  const go = () => { if (!running && !reduce && maskList) { running = true; raf = requestAnimationFrame(frame); } };  // wait for setup()
   const stop = () => { running = false; cancelAnimationFrame(raf); };
   new IntersectionObserver(([e]) => e.isIntersecting ? go() : stop()).observe(hero);
 
