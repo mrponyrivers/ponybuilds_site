@@ -165,12 +165,12 @@
 <header class="bar">
   <a class="mark" href="#top" aria-label="Pony Builds home"><b>PB</b><span>PONY BUILDS</span></a>
   <nav aria-label="Main">
-    <a href="#shipped">Shipped</a>
-    <a href="#packs">Build Packs</a>
-    <a href="#how">How it works</a>
-    <a href="#faq">Questions</a>
+    <a href="#shipped">My builds</a>
+    <a href="https://www.youtube.com/@PonyBuilds" target="_blank" rel="noopener">Watch</a>
+    <a href="#packs">Shop</a>
+    <a href="#free">Free kit</a>
   </nav>
-  <a class="join" href="#packs">Shop packs</a>
+  <a class="join" href="#packs">Shop</a>
 </header>
 
 <main id="top">
@@ -178,10 +178,10 @@
     <canvas id="rain" aria-hidden="true"></canvas>
     <h1 id="title" class="sr-only">Pony Builds</h1>
     <div class="hero-copy">
-      <p class="wake"><strong>Wake up. Build something.</strong>Complex builds, clean finish. Watch me build real apps from start to finish, then download the finished app and launch it as your own.<span class="cursor" aria-hidden="true"></span></p>
+      <p class="wake"><strong>Wake up. Build something.</strong>I build real apps with AI and show how on YouTube. Want the finished app? Get the pack and launch it as your own.<span class="cursor" aria-hidden="true"></span></p>
       <div class="hero-actions">
-        <a class="btn solid" href="#packs">See the Build Packs</a>
-        <a class="btn ghost" href="#free">Get the free starter kit</a>
+        <a class="btn solid" href="#packs">Get a Build Pack</a>
+        <a class="btn ghost" href="https://www.youtube.com/@PonyBuilds" target="_blank" rel="noopener">Watch me build</a>
       </div>
     </div>
   </section>
@@ -208,15 +208,15 @@
     <div class="wrap">
       <p class="prompt">ls ~/build-packs</p>
       <h2>Build Packs</h2>
-      <p class="lede">Each pack is one real build. Watch me make it, download the finished app, and launch it under your own name. Pay once, keep it forever.</p>
+      <p class="lede">Each pack is one real build. Download the finished app, follow the guide, and launch it under your own name. Pay once, keep it forever. One pack is ready now; more are on the way.</p>
       <div class="inpack">
-        <div><h3>The full build video</h3><p>My screen recording, cut into short chapters so you can follow at your own speed.</p></div>
+        <div><h3>The step-by-step guide</h3><p>A short PDF that walks you through every step, from download to live site.</p></div>
         <div><h3>The finished code</h3><p>The working app, ready to put online and make your own.</p></div>
-        <div><h3>The setup checklist</h3><p>Every step on one page, so you never get stuck.</p></div>
+        <div><h3>Build videos</h3><p>Watch how it was made on YouTube, and get the full build video free when it lands.</p></div>
         <div><h3>Launch steps</h3><p>GitHub, Railway and Stripe, so it's live and can take payments.</p></div>
       </div>
       <div class="kits">
-        <article class="kit pack" data-pack="website"><p class="file">motion-website/</p><h3>Motion Website</h3><p>Build and launch a website like this one, with a moving hero, a store and payments.</p><ul><li>Animated code-rain intro</li><li>Mobile-first layout</li><li>Stripe buy buttons</li><li>Live on your own domain</li></ul><div class="buy"><span class="cost">$39</span><a class="btn solid" href="#packs">Buy the pack</a></div></article>
+        <article class="kit pack" data-pack="website"><p class="file">motion-website/ <span class="tag">ready now</span></p><h3>Motion Website</h3><p>Build and launch a website like this one, with a moving hero, a store and payments.</p><ul><li>Animated code-rain intro</li><li>Mobile-first layout</li><li>Stripe buy buttons</li><li>Live on your own domain</li></ul><div class="buy"><span class="cost">$39</span><a class="btn solid" href="#packs">Buy the pack</a></div></article>
         <article class="kit pack" data-pack="bizsite"><p class="file">business-site/</p><h3>Business Site + Payments</h3><p>The full site I built for my clipping studio, with plans, checkout and a business email.</p><ul><li>Service plans and checkout</li><li>Order emails</li><li>Custom domain and email</li><li>Hosted on Railway</li></ul><div class="buy"><span class="cost">$79</span><a class="btn solid" href="#packs">Buy the pack</a></div></article>
         <article class="kit pack" data-pack="clipper"><p class="file">stream-clipper/</p><h3>Stream Clipper</h3><p>A tool that watches a live stream, finds the moments chat goes crazy, and cuts them into clips.</p><ul><li>Finds the hype moments</li><li>Cuts vertical clips</li><li>Captions and facecam layout</li><li>Runs on your own computer</li></ul><div class="buy"><span class="cost">$99</span><a class="btn solid" href="#packs">Buy the pack</a></div></article>
         <article class="kit pack" data-pack="studio"><p class="file">ai-film-studio/</p><h3>AI Film Studio</h3><p>My own studio for making AI series: characters, multi-shot scenes, sound and finished episodes.</p><ul><li>Character and scene setup</li><li>Multi-shot scene prompts</li><li>Fix-it playbook for bad takes</li><li>Episode assembly</li></ul><div class="buy"><span class="cost">$149</span><a class="btn solid" href="#packs">Buy the pack</a></div></article>
@@ -232,7 +232,7 @@
         <div class="step"><h3>Pick a pack</h3><p>Choose the build you want to own.</p></div>
         <div class="step"><h3>Pay once</h3><p>Secure checkout with Stripe. No subscription.</p></div>
         <div class="step"><h3>Download</h3><p>You go straight to your download page after paying.</p></div>
-        <div class="step"><h3>Build and launch</h3><p>Follow the video and put your version online.</p></div>
+        <div class="step"><h3>Build and launch</h3><p>Follow the guide and put your version online.</p></div>
       </div>
     </div>
   </section>
@@ -290,7 +290,7 @@ const PB = {
     clipper: '',   // Stream Clipper       $99
     studio:  ''    // AI Film Studio      $149
   },
-  instagram: ''    // e.g. https://instagram.com/ponybuilds
+  instagram: 'https://www.instagram.com/ponybuilds/'
 };
 
 document.getElementById('yr').textContent = new Date().getFullYear();
