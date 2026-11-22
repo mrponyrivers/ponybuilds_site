@@ -98,9 +98,16 @@ function readPack(pack) {
 }
 
 // ---------- email ----------
+// Either SMTP_URL, or SMTP_HOST + SMTP_USER + SMTP_PASS (e.g. Zoho: smtp.zoho.eu, port 465).
+const clean = v => (v || '').trim().replace(/^['"]|['"]$/g, '');
 let mailer = null;
 if (process.env.SMTP_URL === 'json') mailer = nodemailer.createTransport({ jsonTransport: true }); // tests
-else if (process.env.SMTP_URL) mailer = nodemailer.createTransport(process.env.SMTP_URL);
+else if (process.env.SMTP_URL) mailer = nodemailer.createTransport(clean(process.env.SMTP_URL));
+else if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+  const port = Number(process.env.SMTP_PORT || 465);
+  mailer = nodemailer.createTransport({ host: clean(process.env.SMTP_HOST), port, secure: port === 465,
+    auth: { user: clean(process.env.SMTP_USER), pass: clean(process.env.SMTP_PASS) } });
+}
 const sentEmails = new Set(); // stops a double email if Stripe sends the same event twice
 
 function downloadLink(sessionId) { return `${SITE_URL}/thanks?session_id=${encodeURIComponent(sessionId)}`; }
@@ -111,6 +118,7 @@ async function sendPackEmail({ email, pack, sessionId }) {
   const link = downloadLink(sessionId);
   const info = await mailer.sendMail({
     from: MAIL_FROM,
+    replyTo: SUPPORT_EMAIL,
     to: email,
     subject: `Your ${p.name} Build Pack is ready`,
     text: `Thanks for buying the ${p.name} Build Pack.\n\nDownload it here:\n${link}\n\nThis link is just for you and works for ${LINK_DAYS} days. Download the pack and keep the file.\n\nStart with START_HERE.pdf inside the zip.\n\nQuestions? Just reply to this email.\n\nPony\nponybuilds.com`,
@@ -238,6 +246,12 @@ app.get('/download', async (req, res) => {
   res.send(data);
 });
 
+app.get('/healthz', async (req, res, next) => {
+  if (req.query.check !== 'email') return next();
+  if (!mailer) return res.json({ email: false });
+  try { await mailer.verify(); res.json({ email: true, email_login: 'ok' }); }
+  catch (e) { res.json({ email: true, email_login: 'failed', reason: String(e.response || e.code || e.message).slice(0, 120) }); }
+});
 app.get('/healthz', (req, res) => res.json({
   ok: true,
   stripe: !!stripe,
